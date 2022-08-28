@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:capstone_draft_flutter/screens/welcome_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const TechFarms());
 
-class MyApp extends StatelessWidget {
+class TechFarms extends StatelessWidget {
+  const TechFarms({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

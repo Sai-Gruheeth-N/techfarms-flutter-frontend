@@ -27,7 +27,8 @@ class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      // automaticallyImplyLeading: false,
+
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -43,7 +44,7 @@ class _MainAppBarState extends State<MainAppBar> {
           ),
           const SizedBox(width: 15.0),
           const Padding(
-            padding: EdgeInsets.only(right: 0.0),
+            padding: EdgeInsets.only(right: 20.0),
             child: Text(
               'Tech-Farms',
               style:
@@ -51,6 +52,15 @@ class _MainAppBarState extends State<MainAppBar> {
             ),
           ),
         ],
+      ),
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(
+          Icons.arrow_back_ios,
+          color: Colors.lightGreen[600],
+        ),
       ),
       actions: [
         Padding(
