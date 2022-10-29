@@ -34,6 +34,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   rflutter_alert: ^2.0.4
+  firebase_core: ^1.21.1
+  image_picker: ^0.8.5+3
+  http: ^0.13.5
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:
@@ -60,7 +64,7 @@ flutter:
   assets:
     - images/
     - assets/
-    - C:/Users/gruhe/Desktop/DataSet for Capstone/Blueberry___healthy/image-27.jpg
+    # - C:/Users/gruhe/Desktop/DataSet for Capstone/Blueberry___healthy/image-27.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

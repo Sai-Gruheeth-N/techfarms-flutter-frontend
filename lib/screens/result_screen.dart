@@ -1,40 +1,76 @@
-import 'package:capstone_draft_flutter/appBar/main_appbar.dart';
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:capstone_draft_flutter/appBar/main_appbar.dart';
+import 'package:cupertino_icons/cupertino_icons.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({super.key});
+  File selectedImage;
+  ResultPage({super.key, required this.selectedImage});
 
   @override
   State<ResultPage> createState() => _ResultPageState();
 }
 
 class _ResultPageState extends State<ResultPage> {
-  Future<Map> getData() async {
-    final String response = await rootBundle.loadString('assets/sample.json');
-    Map data = json.decode(response);
+  onUploadImage() async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('https://techfarmtest.herokuapp.com/upload'),
+    );
+    Map<String, String> headers = {"Content-type": "multipart/form-data"};
+    request.files.add(
+      http.MultipartFile(
+        widget.selectedImage.toString(),
+        widget.selectedImage.readAsBytes().asStream(),
+        widget.selectedImage.lengthSync(),
+        filename: widget.selectedImage.path.split('/').last,
+      ),
+    );
+    request.headers.addAll(headers);
+    // log("${request.contentLength}", name: 'Request-contentLength');
+    log("Request : ${request.toString()}", name: "Request");
+    print('sending');
+    var res = await request.send();
+    print('sent');
+    http.Response response = await http.Response.fromStream(res);
+    log('${response.statusCode}', name: 'API-Response-StatusCode');
+    var data = jsonDecode(response.body);
     return data;
   }
+
+  // Future<Map> getData() async {
+  //   final String response = await rootBundle.loadString('assets/sample.json');
+  //   Map data = json.decode(response);
+  //   return data;
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MainAppBar(),
       body: FutureBuilder(
-        future: getData(),
+        future: onUploadImage(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Result(data: snapshot.data as Map);
-          }
-          if (snapshot.hasError) {
-            print('snapshot contains no data');
-            return const Center(
-              child: Text('Empty'),
-            );
+            if (snapshot.hasData) {
+              return Result(data: snapshot.data as Map);
+            } else if (snapshot.hasError) {
+              print('snapshot contains no data');
+              return const Center(
+                child: Text('Empty'),
+              );
+            }
           } else {
-            return const CircularProgressIndicator();
+            return const Center(
+              child: CupertinoActivityIndicator(),
+            );
           }
+          return Container();
         },
       ),
     );

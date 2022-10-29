@@ -28,7 +28,6 @@ class _MainAppBarState extends State<MainAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       // automaticallyImplyLeading: false,
-
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

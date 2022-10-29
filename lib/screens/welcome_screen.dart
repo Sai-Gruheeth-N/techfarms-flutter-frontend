@@ -47,7 +47,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return HomePage();
+              return const HomePage();
             }));
           },
           backgroundColor: Colors.green[600],
