@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:capstone_draft_flutter/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone_draft_flutter/appBar/main_appbar.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 // import 'package:capstone_draft_flutter/SharedPreferences.dart';
 // import 'package:capstone_draft_flutter/screens/camera_screen.dart';
 
@@ -31,18 +33,64 @@ class _HomePageState extends State<HomePage> {
 
   pickImageFromGallery() async {
     var _image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      image = File(_image!.path);
-      // _pref.saveImage(image);
-    });
+    if (_image != null) {
+      setState(() {
+        image = File(_image.path);
+        // _pref.saveImage(image);
+      });
+    } else {
+      print('No image selected');
+    }
   }
 
   pickImageFromCamera() async {
     var _image = await ImagePicker().pickImage(source: ImageSource.camera);
-    setState(() {
-      image = File(_image!.path);
-      // _pref.saveImage(image);
-    });
+    if (_image != null) {
+      setState(() {
+        image = File(_image.path);
+        // _pref.saveImage(image);
+      });
+    } else {
+      print('No image captured');
+    }
+  }
+
+  onUploadImage(File img) async {
+    // log('${img.path}', name: 'file-name');
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://10.0.2.2:5000/upload'),
+    );
+    request.files.add(
+      await http.MultipartFile.fromPath('image', img.path),
+    );
+    var res = await request.send();
+    log(res.reasonPhrase!);
+
+    // var request = http.get(Uri.parse('0.0.0.0:5000/'));
+    // var request = http.MultipartRequest(
+    //   'POST',
+    //   Uri.parse('0.0.0.0:5000/'),
+    // );
+    // Map<String, String> headers = {"Content-type": "multipart/form-data"};
+    // request.files.add(
+    //   http.MultipartFile(
+    //     widget.selectedImage.toString(),
+    //     widget.selectedImage.readAsBytes().asStream(),
+    //     widget.selectedImage.lengthSync(),
+    //     filename: widget.selectedImage.path.split('/').last,
+    //   ),
+    // );
+    // request.headers.addAll(headers);
+    // log("${request.files.first}", name: 'Request-files');
+    // log("Request : ${request.toString()}", name: "Request");
+    // print('sending');
+    // var res = await request.send();
+    // print('sent');
+    // var response = await http.get(Uri.parse('http://10.0.2.2:5000/'));
+    // log('${response.statusCode}', name: 'API-Response-StatusCode');
+    // var data = jsonDecode(response.body);
+    // return data;
   }
 
   @override
@@ -51,7 +99,6 @@ class _HomePageState extends State<HomePage> {
       appBar: const MainAppBar(),
       body: Center(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
               margin: const EdgeInsets.only(top: 100.0),
@@ -67,7 +114,8 @@ class _HomePageState extends State<HomePage> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: MemoryImage(
-                                image!.readAsBytesSync() as Uint8List),
+                              image!.readAsBytesSync() as Uint8List,
+                            ),
                           ),
                         ),
                       )
@@ -137,7 +185,8 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  await onUploadImage(image!);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

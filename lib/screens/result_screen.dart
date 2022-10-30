@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:capstone_draft_flutter/appBar/main_appbar.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ResultPage extends StatefulWidget {
   File selectedImage;
@@ -17,31 +19,22 @@ class ResultPage extends StatefulWidget {
 }
 
 class _ResultPageState extends State<ResultPage> {
-  onUploadImage() async {
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('https://techfarmtest.herokuapp.com/upload'),
-    );
-    Map<String, String> headers = {"Content-type": "multipart/form-data"};
-    request.files.add(
-      http.MultipartFile(
-        widget.selectedImage.toString(),
-        widget.selectedImage.readAsBytes().asStream(),
-        widget.selectedImage.lengthSync(),
-        filename: widget.selectedImage.path.split('/').last,
-      ),
-    );
-    request.headers.addAll(headers);
-    // log("${request.contentLength}", name: 'Request-contentLength');
-    log("Request : ${request.toString()}", name: "Request");
-    print('sending');
-    var res = await request.send();
-    print('sent');
-    http.Response response = await http.Response.fromStream(res);
+  predict() async {
+    var response = await http.get(Uri.parse('http://10.0.2.2:5000/predict'));
     log('${response.statusCode}', name: 'API-Response-StatusCode');
     var data = jsonDecode(response.body);
     return data;
   }
+  // onUploadImage() async {
+  //   var postUri = Uri.parse('https://techfarmtest.herokuapp.com/upload');
+  //   var request = http.MultipartRequest('POST', postUri);
+  //   // request.fields['image'] = widget.selectedImage.path;
+  //   request.files.add(
+  //     http.MultipartFile();
+  //   );
+  //   // http.MultipartFile.fromBytes('file', await File.fromRawPath(widget.selectedImage as Uint8List).readAsBytes(), contentType: MediaType('image', 'jpg'),);
+  //   // var multipart = http.MultipartFile();
+  // }
 
   // Future<Map> getData() async {
   //   final String response = await rootBundle.loadString('assets/sample.json');
@@ -54,8 +47,9 @@ class _ResultPageState extends State<ResultPage> {
     return Scaffold(
       appBar: const MainAppBar(),
       body: FutureBuilder(
-        future: onUploadImage(),
+        future: predict(),
         builder: (context, snapshot) {
+          log('${snapshot.data}', name: 'SnapShot data');
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return Result(data: snapshot.data as Map);
@@ -88,7 +82,7 @@ class Result extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 75.0),
-            child: Image.asset(data['sample']),
+            // child: Image.asset(data['result']),
           ),
           Container(
             margin: const EdgeInsets.all(10.0),
@@ -99,7 +93,8 @@ class Result extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(
-                data['label'],
+                data['result'],
+                // data['label'],
                 style: const TextStyle(
                     fontSize: 22.0, fontWeight: FontWeight.w600),
               ),
