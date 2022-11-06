@@ -59,38 +59,17 @@ class _HomePageState extends State<HomePage> {
     // log('${img.path}', name: 'file-name');
     var request = http.MultipartRequest(
       'POST',
+      // Uri.parse('https://techfarmtest.herokuapp.com/upload'),
       Uri.parse('http://10.0.2.2:5000/upload'),
     );
     request.files.add(
       await http.MultipartFile.fromPath('image', img.path),
     );
     var res = await request.send();
-    log(res.reasonPhrase!);
-
-    // var request = http.get(Uri.parse('0.0.0.0:5000/'));
-    // var request = http.MultipartRequest(
-    //   'POST',
-    //   Uri.parse('0.0.0.0:5000/'),
-    // );
-    // Map<String, String> headers = {"Content-type": "multipart/form-data"};
-    // request.files.add(
-    //   http.MultipartFile(
-    //     widget.selectedImage.toString(),
-    //     widget.selectedImage.readAsBytes().asStream(),
-    //     widget.selectedImage.lengthSync(),
-    //     filename: widget.selectedImage.path.split('/').last,
-    //   ),
-    // );
-    // request.headers.addAll(headers);
-    // log("${request.files.first}", name: 'Request-files');
-    // log("Request : ${request.toString()}", name: "Request");
-    // print('sending');
-    // var res = await request.send();
-    // print('sent');
-    // var response = await http.get(Uri.parse('http://10.0.2.2:5000/'));
-    // log('${response.statusCode}', name: 'API-Response-StatusCode');
-    // var data = jsonDecode(response.body);
-    // return data;
+    print('------------------------------------------------------');
+    log('${res.statusCode}', name: 'POST-request-statusCode');
+    log('${res.reasonPhrase}', name: 'POST-request-status');
+    print('------------------------------------------------------');
   }
 
   @override
