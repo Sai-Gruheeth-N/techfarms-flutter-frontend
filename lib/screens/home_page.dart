@@ -18,25 +18,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   File? image;
-  // SharedPreference _pref = SharedPreference();
-
-  // pickImage(ImageSource source) async {
-  //   final ImagePicker picker = ImagePicker();
-  //   XFile? file = await picker.pickImage(source: source);
-  //   if (file != null) {
-  //     return file.readAsBytes();
-  //   } else {
-  //     throw Exception('No image selected');
-  //     // print('No image selected.');
-  //   }
-  // }
 
   pickImageFromGallery() async {
     var _image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (_image != null) {
       setState(() {
         image = File(_image.path);
-        // _pref.saveImage(image);
       });
     } else {
       print('No image selected');
@@ -48,7 +35,6 @@ class _HomePageState extends State<HomePage> {
     if (_image != null) {
       setState(() {
         image = File(_image.path);
-        // _pref.saveImage(image);
       });
     } else {
       print('No image captured');
@@ -60,7 +46,9 @@ class _HomePageState extends State<HomePage> {
     var request = http.MultipartRequest(
       'POST',
       // Uri.parse('https://techfarmtest.herokuapp.com/upload'),
-      Uri.parse('http://10.0.2.2:5000/upload'),
+      // Uri.parse('http://10.0.2.2:8080/upload'),
+      Uri.parse(
+          'http://ec2-54-153-53-185.us-west-1.compute.amazonaws.com:8080/upload'),
     );
     request.files.add(
       await http.MultipartFile.fromPath('image', img.path),

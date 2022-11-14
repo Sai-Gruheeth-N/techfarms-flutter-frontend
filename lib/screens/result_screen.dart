@@ -24,8 +24,10 @@ class _ResultPageState extends State<ResultPage> {
     final String file = fileName.split('/').last;
     // final response = await http
     //     .get(Uri.parse('https://techfarmtest.herokuapp.com/predict/$file'));
-    final response =
-        await http.get(Uri.parse('http://10.0.2.2:5000/predict/$file'));
+    // final response =
+    //     await http.get(Uri.parse('http://10.0.2.2:8080/predict/$file'));
+    final response = await http.get(Uri.parse(
+        'http://ec2-54-153-53-185.us-west-1.compute.amazonaws.com:8080/predict/$file'));
     var data = jsonDecode(response.body);
     return data;
   }
@@ -44,7 +46,7 @@ class _ResultPageState extends State<ResultPage> {
             } else if (snapshot.hasError) {
               print('snapshot contains no data');
               return const Center(
-                child: Text('Empty'),
+                child: Text('Something went wrong'),
               );
             }
           } else {
@@ -67,16 +69,18 @@ class Result extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Container(
-          //   padding: const EdgeInsets.symmetric(vertical: 75.0),
-          //   child: Image(
-          //     image: MemoryImage(data['Sample']),
-          //   ),
-          // ),
           Container(
-            margin: const EdgeInsets.all(10.0),
+            margin: EdgeInsets.only(top: 60),
+            child: Image(
+              image: NetworkImage(
+                  'https://techfarmstest.s3.us-west-1.amazonaws.com/${data['Sample']}'),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(
+                top: 20.0, bottom: 10.0, left: 10.0, right: 10.0),
             decoration: BoxDecoration(
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(15.0),
