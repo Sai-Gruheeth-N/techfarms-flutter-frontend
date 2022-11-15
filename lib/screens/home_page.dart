@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:capstone_draft_flutter/appBar/main_appbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-// import 'package:capstone_draft_flutter/SharedPreferences.dart';
-// import 'package:capstone_draft_flutter/screens/camera_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

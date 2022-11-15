@@ -1,15 +1,10 @@
 import 'dart:developer';
-
-import 'package:capstone_draft_flutter/main.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:capstone_draft_flutter/appBar/main_appbar.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
-import 'package:http_parser/http_parser.dart';
 
 class ResultPage extends StatefulWidget {
   File selectedImage;
@@ -72,7 +67,7 @@ class Result extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            margin: EdgeInsets.only(top: 60),
+            margin: const EdgeInsets.only(top: 60),
             child: Image(
               image: NetworkImage(
                   'https://techfarmstest.s3.us-west-1.amazonaws.com/${data['Sample']}'),
