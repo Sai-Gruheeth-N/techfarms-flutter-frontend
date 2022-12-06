@@ -29,7 +29,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   pickImageFromCamera() async {
-    var _image = await ImagePicker().pickImage(source: ImageSource.camera);
+    var _image = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        maxHeight: 256,
+        maxWidth: 256,
+        imageQuality: 80);
     if (_image != null) {
       setState(() {
         image = File(_image.path);

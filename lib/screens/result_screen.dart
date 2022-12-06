@@ -20,7 +20,7 @@ class _ResultPageState extends State<ResultPage> {
     // final response = await http
     //     .get(Uri.parse('https://techfarmtest.herokuapp.com/predict/$file'));
     // final response =
-    //     await http.get(Uri.parse('http://10.0.2.2:8080/predict/$file'));
+        // await http.get(Uri.parse('http://10.0.2.2:8080/predict/$file'));
     final response = await http.get(Uri.parse(
         'http://ec2-54-153-53-185.us-west-1.compute.amazonaws.com:8080/predict/$file'));
     var data = jsonDecode(response.body);
