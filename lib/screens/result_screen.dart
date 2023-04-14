@@ -84,8 +84,6 @@ class Result extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: Text(
                 'Result : ${data['Label']}',
-                // data['result'],
-                // data['label'],
                 style: const TextStyle(
                     fontSize: 22.0, fontWeight: FontWeight.w600),
               ),
