@@ -44,7 +44,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   onUploadImage(File img) async {
-    // log('${img.path}', name: 'file-name');
     var request = http.MultipartRequest(
       'POST',
       // Uri.parse('https://techfarmtest.herokuapp.com/upload'),
@@ -56,10 +55,8 @@ class _HomePageState extends State<HomePage> {
       await http.MultipartFile.fromPath('image', img.path),
     );
     var res = await request.send();
-    print('------------------------------------------------------');
     log('${res.statusCode}', name: 'POST-request-statusCode');
     log('${res.reasonPhrase}', name: 'POST-request-status');
-    print('------------------------------------------------------');
   }
 
   @override
